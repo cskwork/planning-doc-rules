@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>기획서 작성 10원칙 / Ten Rules for Writing a Planning Document</title>
+<meta name="description" content="서비스·소프트웨어·사업·전략 기획서를 의사결정 문서로 만드는 10가지 원칙. AI 에이전트용 드롭인 시스템 프롬프트." />
+<meta property="og:title" content="기획서 작성 10원칙 / Ten Rules for Writing a Planning Document" />
+<meta property="og:description" content="A drop-in system prompt that turns any AI agent into a senior planner who writes decision-grade planning documents." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://cskwork.github.io/planning-doc-rules/" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230b1020'/%3E%3Ctext x='32' y='44' font-size='36' text-anchor='middle' fill='%23f5d76e' font-family='Georgia'%3E10%3C/text%3E%3C/svg%3E" />
+<style>
+  :root {
+    --bg: #0b1020;
+    --bg-soft: #0f1530;
+    --fg: #eef0f7;
+    --fg-dim: #b3b8cc;
+    --accent: #f5d76e;
+    --accent-soft: #f5d76e22;
+    --line: #1c2347;
+    --code-bg: #0a0e22;
+    --radius: 14px;
+    --maxw: 980px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Pretendard", "Noto Sans KR", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  body {
+    background:
+      radial-gradient(1100px 600px at 80% -10%, #1b234f 0%, transparent 60%),
+      radial-gradient(900px 500px at 0% 10%, #161b3a 0%, transparent 55%),
+      var(--bg);
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  header.site {
+    position: sticky; top: 0; z-index: 10;
+    backdrop-filter: blur(8px);
+    background: rgba(11, 16, 32, 0.7);
+    border-bottom: 1px solid var(--line);
+  }
+  header.site .row {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 14px 22px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .brand { font-weight: 700; letter-spacing: 0.2px; }
+  .brand .dot { color: var(--accent); }
+  .lang-toggle {
+    display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden;
+    background: var(--bg-soft);
+  }
+  .lang-toggle button {
+    background: transparent; border: 0; color: var(--fg-dim);
+    padding: 6px 14px; font-size: 13px; cursor: pointer; font-weight: 600;
+  }
+  .lang-toggle button.active { background: var(--accent); color: #1a1300; }
+  main { max-width: var(--maxw); margin: 0 auto; padding: 48px 22px 80px; }
+  section.hero { padding: 28px 0 36px; border-bottom: 1px solid var(--line); margin-bottom: 36px; }
+  h1 { font-size: clamp(28px, 4.2vw, 44px); line-height: 1.2; margin: 0 0 14px; letter-spacing: -0.5px; }
+  h1 .accent { color: var(--accent); }
+  .lead { color: var(--fg-dim); font-size: 17px; max-width: 720px; }
+  .cta { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 16px; border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--bg-soft); color: var(--fg);
+    font-weight: 600; font-size: 14px;
+  }
+  .btn.primary { background: var(--accent); color: #1a1300; border-color: var(--accent); }
+  .btn:hover { text-decoration: none; transform: translateY(-1px); }
+  h2 { font-size: 22px; margin: 44px 0 14px; letter-spacing: -0.2px; }
+  h3 { font-size: 17px; margin: 22px 0 8px; color: var(--fg); }
+  p { color: var(--fg); margin: 0 0 12px; }
+  ul { padding-left: 18px; }
+  ul li { margin: 4px 0; color: var(--fg-dim); }
+  .rules { display: grid; grid-template-columns: 1fr; gap: 12px; counter-reset: rule; margin-top: 8px; }
+  .rule {
+    border: 1px solid var(--line); border-radius: var(--radius);
+    background: var(--bg-soft);
+    padding: 16px 18px;
+    counter-increment: rule;
+    position: relative;
+  }
+  .rule::before {
+    content: counter(rule);
+    position: absolute; top: 14px; right: 16px;
+    color: var(--accent);
+    font-family: Georgia, serif;
+    font-size: 22px; font-weight: 700;
+    opacity: 0.85;
+  }
+  .rule h4 { margin: 0 0 6px; font-size: 16px; color: var(--fg); padding-right: 32px; }
+  .rule p { color: var(--fg-dim); font-size: 15px; margin: 0; }
+  pre.code {
+    background: var(--code-bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #d7defb;
+  }
+  table {
+    border-collapse: collapse; width: 100%;
+    font-size: 14px; margin: 6px 0 12px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+  }
+  th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--line); }
+  th { background: #141a3a; color: var(--fg); font-weight: 600; font-size: 13px; }
+  td { color: var(--fg-dim); }
+  tr:last-child td { border-bottom: 0; }
+  .toc-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 8px;
+  }
+  .toc-grid .item {
+    background: var(--bg-soft); border: 1px solid var(--line);
+    border-radius: 10px; padding: 10px 12px;
+    font-size: 14px; color: var(--fg-dim);
+  }
+  .toc-grid .item b { color: var(--accent); margin-right: 6px; }
+  .refs { font-size: 14px; color: var(--fg-dim); }
+  .refs li { margin: 6px 0; }
+  footer.site {
+    margin-top: 60px; padding: 24px 22px;
+    border-top: 1px solid var(--line);
+    color: var(--fg-dim); font-size: 13px;
+    text-align: center;
+  }
+  .quote {
+    border-left: 3px solid var(--accent);
+    padding: 8px 14px; margin: 16px 0;
+    color: var(--fg);
+    background: var(--accent-soft);
+    border-radius: 0 8px 8px 0;
+  }
+  [data-i18n-en] { display: none; }
+  html[data-lang="en"] [data-i18n-ko] { display: none; }
+  html[data-lang="en"] [data-i18n-en] { display: revert; }
+  @media (max-width: 600px) {
+    main { padding: 28px 18px 60px; }
+    header.site .row { padding: 12px 18px; }
+    h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="row">
+    <div class="brand"><span class="dot">●</span>&nbsp;<span data-i18n-ko>기획서 10원칙</span><span data-i18n-en>Planning Doc · 10 Rules</span></div>
+    <div class="lang-toggle" role="tablist" aria-label="Language">
+      <button id="btn-ko" class="active" type="button" aria-pressed="true">한국어</button>
+      <button id="btn-en" type="button" aria-pressed="false">English</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="hero">
+  <h1 data-i18n-ko>좋은 기획서는 <span class="accent">설명서가 아니라 의사결정 문서</span>다.</h1>
+  <h1 data-i18n-en>A great planning doc is <span class="accent">not a brochure — it is a decision document.</span></h1>
+
+  <p class="lead" data-i18n-ko>
+    서비스·소프트웨어·사업·전략 기획서를 의사결정 문서로 만들기 위한 10가지 원칙. 어떤 AI 에이전트(Claude Code, Codex CLI, Gemini CLI, Cursor 등)에서도 그대로 쓰는 드롭인 시스템 프롬프트입니다.
+  </p>
+  <p class="lead" data-i18n-en>
+    Ten rules that turn any AI agent (Claude Code, Codex CLI, Gemini CLI, Cursor, etc.) into a senior planner who writes service / software / business / strategy planning documents at decision-grade quality.
+  </p>
+
+  <div class="cta">
+    <a class="btn primary" href="https://github.com/cskwork/planning-doc-rules" target="_blank" rel="noopener">
+      <span data-i18n-ko>GitHub 저장소</span><span data-i18n-en>GitHub repository</span>
+    </a>
+    <a class="btn" href="https://raw.githubusercontent.com/cskwork/planning-doc-rules/main/CLAUDE.md" target="_blank" rel="noopener">CLAUDE.md</a>
+    <a class="btn" href="https://raw.githubusercontent.com/cskwork/planning-doc-rules/main/AGENTS.md" target="_blank" rel="noopener">AGENTS.md</a>
+  </div>
+</section>
+
+<!-- WHY -->
+<section>
+  <h2 data-i18n-ko>왜 필요한가</h2>
+  <h2 data-i18n-en>Why this exists</h2>
+
+  <p data-i18n-ko>
+    좋은 기획서는 다음 한 줄이 모든 챕터를 관통합니다.
+  </p>
+  <p data-i18n-en>
+    A great planning document has one single thread running through every chapter:
+  </p>
+
+  <blockquote class="quote">
+    <span data-i18n-ko><b>왜 해야 하는가 → 어떤 문제를 해결하는가 → 누구를 위한 것인가 → 무엇을 만들 것인가 → 어떻게 실행하는가 → 어떻게 검증하는가</b></span>
+    <span data-i18n-en><b>Why we should do it → What problem it solves → Who it is for → What to build → How to execute → How to verify.</b></span>
+  </blockquote>
+
+  <p data-i18n-ko>
+    대부분의 기획서 템플릿이 실패하는 이유는 챕터만 나열할 뿐, 위 한 줄로 묶이지 않기 때문입니다. 승인자는 비용 대비 효과를 찾지 못하고, 개발자는 예외 케이스를 못 찾고, QA는 수용 기준을 못 찾습니다. 이 열 가지 원칙은 모든 챕터가 같은 실 하나로 꿰이도록 강제합니다.
+  </p>
+  <p data-i18n-en>
+    Most templates fail because they only list sections without binding them together. An approver cannot find the cost vs. value. A developer cannot find the exception cases. QA cannot find the acceptance criteria. The Ten Rules block all of those by forcing the same single thread through every section.
+  </p>
+</section>
+
+<!-- INSTALL -->
+<section>
+  <h2 data-i18n-ko>설치</h2>
+  <h2 data-i18n-en>Install</h2>
+
+  <p data-i18n-ko>에이전트가 읽는 파일을 홈 디렉토리 또는 프로젝트 루트에 넣으면 됩니다.</p>
+  <p data-i18n-en>Drop the file your agent reads into your home directory or project root.</p>
+
+  <table>
+    <thead><tr>
+      <th data-i18n-ko>도구</th><th data-i18n-en>Tool</th>
+      <th>File</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>Claude Code</td><td><code>~/.claude/CLAUDE.md</code></td></tr>
+      <tr><td>OpenAI Codex CLI</td><td><code>~/.codex/AGENTS.md</code></td></tr>
+      <tr><td>Google Gemini CLI</td><td><code>~/.gemini/AGENTS.md</code></td></tr>
+      <tr><td>OpenCode</td><td><code>~/.config/opencode/AGENTS.md</code></td></tr>
+      <tr><td>Cursor / Windsurf</td><td><code>&lt;repo&gt;/AGENTS.md</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3 data-i18n-ko>한 줄 설치</h3>
+  <h3 data-i18n-en>One-liner</h3>
+<pre class="code">curl -fsSL https://raw.githubusercontent.com/cskwork/planning-doc-rules/main/AGENTS.md -o ~/.codex/AGENTS.md
+curl -fsSL https://raw.githubusercontent.com/cskwork/planning-doc-rules/main/CLAUDE.md -o ~/.claude/CLAUDE.md</pre>
+
+  <h3 data-i18n-ko>여러 CLI에서 단일 출처로</h3>
+  <h3 data-i18n-en>Single source of truth across CLIs</h3>
+<pre class="code">git clone https://github.com/cskwork/planning-doc-rules.git ~/planning-doc-rules
+
+ln -sf ~/planning-doc-rules/CLAUDE.md   ~/.claude/CLAUDE.md
+ln -sf ~/planning-doc-rules/AGENTS.md   ~/.codex/AGENTS.md
+ln -sf ~/planning-doc-rules/AGENTS.md   ~/.gemini/AGENTS.md
+ln -sf ~/planning-doc-rules/AGENTS.md   ~/.config/opencode/AGENTS.md</pre>
+</section>
+
+<!-- RULES -->
+<section>
+  <h2 data-i18n-ko>10가지 원칙</h2>
+  <h2 data-i18n-en>The Ten Rules</h2>
+
+  <div class="rules" data-i18n-ko>
+    <div class="rule"><h4>Why를 먼저 고정하라</h4><p>무엇을 만들 것인가가 아니라, 왜 지금 해야 하는가, 해결하지 않으면 무엇이 깨지는가, 어떤 조직·사용자·시장 니즈에 답하는가를 먼저 쓴다.</p></div>
+    <div class="rule"><h4>문제를 As-Is / To-Be 격차로 정의하라</h4><p>불만이나 아이디어가 아니라 현재 상태, 목표 상태, 그 차이, 핵심 원인, 우선 해결 순서로 쓴다.</p></div>
+    <div class="rule"><h4>독자의 우려를 목차로 바꿔라</h4><p>작성자가 하고 싶은 말이 아니라 승인자·개발자·디자이너·운영자·투자자가 걱정하는 순서대로 챕터를 배치한다.</p></div>
+    <div class="rule"><h4>리서치로 주장과 의견을 분리하라</h4><p>데스크 리서치, 경쟁 분석, 사용자 인터뷰, 로그, 리뷰, VOC에서 근거를 가져온다. 검증 안 된 부분은 가정 또는 추가 검증 필요로 명확히 표시한다.</p></div>
+    <div class="rule"><h4>사용자 시나리오에서 요구사항을 도출하라</h4><p>페르소나, 상황, 목표, 여정이 먼저고, 기능은 그 행동에서 떨어져 나온다.</p></div>
+    <div class="rule"><h4>요구사항을 모호하지 않게 명세하라</h4><p>ID, 명, 목적, 상세, 사용자, 입력값, 처리 조건, 출력값, 예외, 우선순위, 수용 기준까지 적어 개발·QA·운영이 같은 기준으로 판단하게 한다.</p></div>
+    <div class="rule"><h4>IA → Flow → Wireframe → Spec을 연결하라</h4><p>모든 화면은 어떤 요구사항을 충족하는지, 모든 요구사항은 어느 화면에 떨어지는지 추적 가능해야 한다.</p></div>
+    <div class="rule"><h4>정책과 예외를 먼저 정의하라</h4><p>정상 플로우가 아니라 권한, 상태값, 데이터 보관·삭제, 알림, 승인·반려, 오류, 운영자 개입 케이스를 스펙 확정 전에 박는다.</p></div>
+    <div class="rule"><h4>실행 가능성을 숫자와 계획으로 증명하라</h4><p>범위, 제외 범위, 우선순위, 일정, 인력, 리소스, 의존성, 리스크, 대안, 단계별 실행 계획을 모두 적는다.</p></div>
+    <div class="rule"><h4>검증·론칭·운영까지 닫아라</h4><p>개발 완료가 끝이 아니다. QA 시나리오, 테스트케이스, 론칭 계획, 운영 매뉴얼, CS 대응, KPI, 사후 고도화 사이클까지 포함한다.</p></div>
+  </div>
+
+  <div class="rules" data-i18n-en>
+    <div class="rule"><h4>Anchor "Why" first</h4><p>Open with the reason this work exists, why it must happen now, what breaks if it does not, and which organizational / user / market need it answers. Never start with "what to build."</p></div>
+    <div class="rule"><h4>Define the problem as an As-Is / To-Be gap</h4><p>Not a complaint, not an idea. Current state, target state, gap, root cause, priority of what to solve first.</p></div>
+    <div class="rule"><h4>Turn the reader's worries into the table of contents</h4><p>Order sections by the anxieties of approver, developer, designer, operator, investor — not by what the author wants to say.</p></div>
+    <div class="rule"><h4>Separate claim from evidence with research</h4><p>Pull from desk research, competitor analysis, user interviews, logs, reviews, VOC. Mark anything not yet supported as assumption or needs further validation.</p></div>
+    <div class="rule"><h4>Derive requirements from user scenarios</h4><p>Persona, situation, goal, journey first. Features fall out of behavior, not the other way around.</p></div>
+    <div class="rule"><h4>Specify requirements without ambiguity</h4><p>ID, name, purpose, detail, users, inputs, processing conditions, outputs, exceptions, priority, acceptance criteria — so dev / QA / ops judge the same way.</p></div>
+    <div class="rule"><h4>Connect IA → Flow → Wireframe → Spec</h4><p>Every screen traces back to a requirement; every requirement lands on a screen.</p></div>
+    <div class="rule"><h4>Define policy and exceptions first</h4><p>Access, state values, data retention, notifications, approval / rejection, error handling, operator-intervention cases — before the spec stabilizes.</p></div>
+    <div class="rule"><h4>Prove feasibility with numbers and a plan</h4><p>Scope, out-of-scope, priority, schedule, headcount, resources, dependencies, risks, alternatives, phased plan.</p></div>
+    <div class="rule"><h4>Close the loop through QA, launch, and operations</h4><p>Test scenarios, launch plan, runbook, CS response, KPI, post-launch improvement cycle.</p></div>
+  </div>
+</section>
+
+<!-- TOC -->
+<section>
+  <h2 data-i18n-ko>표준 목차</h2>
+  <h2 data-i18n-en>Standard table of contents</h2>
+
+  <p data-i18n-ko>이 원칙대로 작성된 기획서가 보통 따르는 순서. 순서 자체가 규칙(원칙 3)입니다 — 각 챕터는 그 시점에 독자가 갖는 특정 우려에 답합니다.</p>
+  <p data-i18n-en>The order is itself a rule (Rule 3) — each section answers a specific worry the reader has at that point.</p>
+
+  <div class="toc-grid" data-i18n-ko>
+    <div class="item"><b>01</b>한 줄 결론</div>
+    <div class="item"><b>02</b>Executive Summary</div>
+    <div class="item"><b>03</b>배경과 문제</div>
+    <div class="item"><b>04</b>As-Is / To-Be</div>
+    <div class="item"><b>05</b>목표·성공 지표</div>
+    <div class="item"><b>06</b>리서치</div>
+    <div class="item"><b>07</b>핵심 인사이트</div>
+    <div class="item"><b>08</b>해결 방향·대안</div>
+    <div class="item"><b>09</b>범위·제외 범위</div>
+    <div class="item"><b>10</b>사용자 시나리오</div>
+    <div class="item"><b>11</b>요구사항</div>
+    <div class="item"><b>12</b>IA / 메뉴 구조</div>
+    <div class="item"><b>13</b>주요 Flow</div>
+    <div class="item"><b>14</b>와이어프레임</div>
+    <div class="item"><b>15</b>정책·예외</div>
+    <div class="item"><b>16</b>일정·리소스·리스크</div>
+    <div class="item"><b>17</b>QA·검증</div>
+    <div class="item"><b>18</b>론칭·운영·KPI</div>
+  </div>
+
+  <div class="toc-grid" data-i18n-en>
+    <div class="item"><b>01</b>One-line conclusion</div>
+    <div class="item"><b>02</b>Executive summary</div>
+    <div class="item"><b>03</b>Background &amp; problem</div>
+    <div class="item"><b>04</b>As-Is / To-Be</div>
+    <div class="item"><b>05</b>Goals &amp; metrics</div>
+    <div class="item"><b>06</b>Research</div>
+    <div class="item"><b>07</b>Key insights</div>
+    <div class="item"><b>08</b>Solution &amp; alternatives</div>
+    <div class="item"><b>09</b>Scope</div>
+    <div class="item"><b>10</b>User scenarios</div>
+    <div class="item"><b>11</b>Requirements</div>
+    <div class="item"><b>12</b>IA / menu</div>
+    <div class="item"><b>13</b>Key flows</div>
+    <div class="item"><b>14</b>Wireframes</div>
+    <div class="item"><b>15</b>Policy &amp; exceptions</div>
+    <div class="item"><b>16</b>Schedule &amp; risks</div>
+    <div class="item"><b>17</b>QA &amp; verification</div>
+    <div class="item"><b>18</b>Launch &amp; ops &amp; KPI</div>
+  </div>
+</section>
+
+<!-- USAGE -->
+<section>
+  <h2 data-i18n-ko>사용 흐름</h2>
+  <h2 data-i18n-en>How an agent uses this</h2>
+
+  <ol>
+    <li data-i18n-ko>에이전트가 <code>CLAUDE.md</code> / <code>AGENTS.md</code>를 시스템 프롬프트로 로드한다.</li>
+    <li data-i18n-en>The agent loads <code>CLAUDE.md</code> / <code>AGENTS.md</code> as its system prompt.</li>
+
+    <li data-i18n-ko>사용자는 1번 기획 주제, 2번 현재 상황, 3번 목표 등 입력 항목을 채워서 던진다.</li>
+    <li data-i18n-en>The user fills in the input form (topic / situation / goal / users / desired output level).</li>
+
+    <li data-i18n-ko>에이전트는 정보 부족 영역을 가정 / 추가 확인 필요 / 현재 정보로 작성 가능한 범위로 구분해서 응답한다.</li>
+    <li data-i18n-en>The agent splits gaps into reasonable assumptions, questions to confirm, and the part it can draft now.</li>
+
+    <li data-i18n-ko>20단계 출력 구조에 맞춰 초안을 작성한다. 초안이 가능하면 질문만 하지 않는다.</li>
+    <li data-i18n-en>It drafts against the 20-section output structure. If a draft is possible, it does not stop at questions.</li>
+
+    <li data-i18n-ko>10원칙 자가 진단 체크리스트와 100점 채점을 마지막에 반드시 출력한다.</li>
+    <li data-i18n-en>It must run the 10-rule self-diagnostic checklist and the 100-point score at the end.</li>
+  </ol>
+</section>
+
+<!-- REFERENCES -->
+<section>
+  <h2 data-i18n-ko>참고 문헌</h2>
+  <h2 data-i18n-en>References</h2>
+
+  <p data-i18n-ko>국내 기획·서비스·소프트웨어 기획 서적과 공공 SW 가이드에서 반복적으로 등장하는 패턴을 정리한 것입니다.</p>
+  <p data-i18n-en>Distilled from repeated patterns across Korean planning, service-planning, and software-planning literature plus public-sector RFP guidance.</p>
+
+  <ul class="refs">
+    <li>박신영, 『기획의 정석』, 세종서적 — 3WR, 5Why, <span data-i18n-ko>현상 분해와 그룹핑, “상대방의 두려움을 없애는 기획서” 관점.</span><span data-i18n-en>decomposition and grouping, "the planning document removes the reader's fear."</span></li>
+    <li>조이, 『서비스를 성공시키는 기획자의 비법 노트』, BJ퍼블릭 — <span data-i18n-ko>리서치 → 문제 정의 → 요구사항 → 페르소나 → 시나리오 → IA → 메뉴 트리 → 플로우차트 → 와이어프레임 → 프로토타이핑 → 기능 요구사항 명세서 → 화면 ID → 정책서 → QA → 론칭 → 운영 → 성과 측정.</span><span data-i18n-en>full pipeline: research → problem → requirements → persona → scenarios → IA → flow → wireframe → prototype → functional spec → screen ID → policy → QA → launch → ops → measurement.</span></li>
+    <li>이경희, 『서비스 기획 용어사전』, 연플 — <span data-i18n-ko>실무 공용 언어로서의 요구사항 정의서, 플로우차트, IA, 와이어프레임, 정책, 분기·예외처리, 화면설계서, QA·테스트케이스.</span><span data-i18n-en>shared vocabulary: requirements doc, flowchart, IA, wireframe, policy, branching, exception handling, screen design, QA test cases.</span></li>
+    <li>Rational 기술팀, 『똑똑한 소프트웨어 개발을 위한 실용 가이드』, 한국아이시스 — <span data-i18n-ko>요구사항 관리, 설계·모델링, 요구사항-개발-테스트 추적성, 협업, 품질 관리.</span><span data-i18n-en>requirements management, requirement-development-test traceability, quality management.</span></li>
+    <li>정보통신산업진흥원(NIPA) — <span data-i18n-ko>공공 SW 사업 요구사항 상세화 가이드 (RFP 수준 요구사항 명세의 제도적 기준).</span><span data-i18n-en>public SW project requirement-detailing guidance (institutional standard for RFP-grade requirement specification).</span></li>
+  </ul>
+</section>
+
+<!-- RELATED -->
+<section>
+  <h2 data-i18n-ko>관련 프로젝트</h2>
+  <h2 data-i18n-en>Related</h2>
+
+  <ul>
+    <li><a href="https://agents.md" target="_blank" rel="noopener">AGENTS.md spec</a> — <span data-i18n-ko>크로스 툴 컨벤션</span><span data-i18n-en>emerging cross-tool convention</span></li>
+    <li><a href="https://github.com/cskwork/coding-agent-rules" target="_blank" rel="noopener">coding-agent-rules</a> — <span data-i18n-ko>코딩 에이전트를 위한 10계명</span><span data-i18n-en>Ten Commandments for Coding Agents</span></li>
+    <li><a href="https://github.com/cskwork/investment-agent-rules" target="_blank" rel="noopener">investment-agent-rules</a> — <span data-i18n-ko>AI 투자 에이전트를 위한 10계명</span><span data-i18n-en>Ten Commandments for AI Investment Agents</span></li>
+  </ul>
+</section>
+
+</main>
+
+<footer class="site">
+  <div>
+    <span data-i18n-ko>좋은 기획서는 상대를 설득하는 문서이면서, 동시에 개발·디자인·운영이 같은 기준으로 실행하게 만드는 명세서다.</span>
+    <span data-i18n-en>A great planning document persuades the reader and at the same time forces dev, design, and operations to execute against a single source of truth.</span>
+  </div>
+  <div style="margin-top: 10px;">
+    MIT License · <a href="https://github.com/cskwork/planning-doc-rules">github.com/cskwork/planning-doc-rules</a>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var html = document.documentElement;
+    var btnKo = document.getElementById('btn-ko');
+    var btnEn = document.getElementById('btn-en');
+
+    function setLang(lang) {
+      html.setAttribute('lang', lang);
+      html.setAttribute('data-lang', lang);
+      btnKo.classList.toggle('active', lang === 'ko');
+      btnEn.classList.toggle('active', lang === 'en');
+      btnKo.setAttribute('aria-pressed', lang === 'ko');
+      btnEn.setAttribute('aria-pressed', lang === 'en');
+      try { localStorage.setItem('pdr-lang', lang); } catch (e) {}
+    }
+
+    btnKo.addEventListener('click', function () { setLang('ko'); });
+    btnEn.addEventListener('click', function () { setLang('en'); });
+
+    var stored = null;
+    try { stored = localStorage.getItem('pdr-lang'); } catch (e) {}
+    if (stored === 'ko' || stored === 'en') {
+      setLang(stored);
+    } else {
+      var nav = (navigator.language || 'ko').toLowerCase();
+      setLang(nav.indexOf('ko') === 0 ? 'ko' : 'en');
+    }
+  })();
+</script>
+</body>
+</html>
